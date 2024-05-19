@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+
+  app:
+    build: 
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:latest
+    env_file:
+      - .postgres.env
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
