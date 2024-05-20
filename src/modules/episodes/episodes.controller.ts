@@ -7,13 +7,15 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { EpisodeService } from './episode.service';
+import { EpisodesService } from './episodes.service';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { UpdateEpisodeDto } from './dto/update-episode.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Episodes')
 @Controller('episodes')
-export class EpisodeController {
-  constructor(private readonly episodeService: EpisodeService) {}
+export class EpisodesController {
+  constructor(private readonly episodeService: EpisodesService) {}
 
   @Post()
   create(@Body() createEpisodeDto: CreateEpisodeDto) {

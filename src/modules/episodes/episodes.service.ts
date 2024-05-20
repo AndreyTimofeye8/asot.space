@@ -3,7 +3,7 @@ import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { UpdateEpisodeDto } from './dto/update-episode.dto';
 
 @Injectable()
-export class EpisodeService {
+export class EpisodesService {
   create(createEpisodeDto: CreateEpisodeDto) {
     return 'This action adds a new episode';
   }
