@@ -8,6 +8,7 @@ export const usersApiData = {
   userEmail: 'user email',
   userPasswordExample: '%paSs123',
   userPassword: 'user password',
+  userRole: 'user role: admin or user',
 };
 
 export const usersValidationMessages = {
@@ -18,3 +19,10 @@ export const usersValidationMessages = {
     'Password must contain one lowercase, one uppercase, one digit, and one special character',
   incorrectPasswordLength: 'Password must be 8 to 30 characters long',
 };
+
+export const userExceptionMessages = {
+  userAlreadyExist: 'User with this email address already exist',
+  userCreateFailed: 'Failed to create user',
+};
+
+export const saltRounds = 10;

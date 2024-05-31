@@ -8,7 +8,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # устанавливаем зависимости
-RUN npm i
+RUN npm install
+
+# пересобираем bcrypt, чтобы избежать проблем с ELF header
+RUN npm rebuild bcrypt --build-from-source
 
 # копируем остальную часть
 COPY . .

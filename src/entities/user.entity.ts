@@ -1,25 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsString, IsStrongPassword, Length } from 'class-validator';
 import { Role } from 'src/common/enum/role.enum';
 import {
   usersApiData,
   usersValidationMessages,
 } from 'src/modules/users/user.constants';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsEmail, IsString, IsStrongPassword, Length } from 'class-validator';
 
 @Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   @ApiProperty({
+    type: 'string',
     example: usersApiData.userIdExample,
     description: usersApiData.userId,
   })
   id: string;
 
   @Column({ type: 'varchar', length: 50 })
-  @IsString({ message: usersValidationMessages.incorrectEmail })
+  @IsString({ message: usersValidationMessages.incorrectLogin })
   @Length(3, 50, { message: usersValidationMessages.incorrectEmailLength })
   @ApiProperty({
+    type: 'string',
     minLength: 3,
     maxLength: 50,
     example: usersApiData.userLoginExample,
@@ -31,6 +33,7 @@ export class User {
   @IsEmail({}, { message: usersValidationMessages.incorrectEmail })
   @Length(6, 100, { message: usersValidationMessages.incorrectEmailLength })
   @ApiProperty({
+    type: 'string',
     minLength: 6,
     maxLength: 100,
     example: usersApiData.userEmailExample,
@@ -51,6 +54,7 @@ export class User {
   )
   @Length(8, 30, { message: usersValidationMessages.incorrectPasswordLength })
   @ApiProperty({
+    type: 'string',
     minLength: 8,
     maxLength: 30,
     example: usersApiData.userPasswordExample,
@@ -59,5 +63,6 @@ export class User {
   password: string;
 
   @Column({ type: 'enum', enum: Role, default: Role.user })
+  @ApiProperty({ type: 'enum', enum: Role, description: usersApiData.userRole })
   role: Role;
 }

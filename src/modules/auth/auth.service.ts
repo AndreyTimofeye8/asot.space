@@ -19,11 +19,14 @@ export class AuthService {
     const createdUser = await this.userService.create(createUserDto);
     const { id, login, email, role } = createdUser;
     const payload = { id, login, email, role };
+    // const token = this.generateToken(payload);
     const token = this.generateToken(payload);
     return { token };
   }
 
-  async loginUser(loginUserDto: LoginUserDto) {}
+  async loginUser(loginUserDto: LoginUserDto) {
+    return loginUserDto;
+  }
 
   generateToken(payload: JwtPayloadDto) {
     const secret = this.configService.get('JWT_SECRET');
