@@ -21,8 +21,6 @@ export const usersValidationMessages = {
 };
 
 export const userExceptionMessages = {
-  userAlreadyExist: 'User with this email address already exist',
+  userAlreadyExist: 'Account with this email address already exist',
   userCreateFailed: 'Failed to create user',
 };
-
-export const saltRounds = 10;

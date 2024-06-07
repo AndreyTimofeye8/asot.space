@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, IsStrongPassword, Length } from 'class-validator';
-import { Role } from 'src/common/enum/role.enum';
+import { Role } from '../common/enum/role.enum';
 import {
   usersApiData,
   usersValidationMessages,
-} from 'src/modules/users/user.constants';
+} from '../modules/users/user.constants';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'user' })
