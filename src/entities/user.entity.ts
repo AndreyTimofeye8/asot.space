@@ -6,13 +6,14 @@ import {
   usersValidationMessages,
 } from '../modules/users/user.constants';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { apiData } from 'src/common/constants';
 
 @Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   @ApiProperty({
     type: 'string',
-    example: usersApiData.userIdExample,
+    example: apiData.idExample,
     description: usersApiData.userId,
   })
   id: string;

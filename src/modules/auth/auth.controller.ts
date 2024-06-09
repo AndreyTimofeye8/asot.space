@@ -11,11 +11,10 @@ import { Public } from '../../common/decorator/public.decorator';
 import { LoginUserDto } from './dto/login-user.dto';
 import { authApiData } from './auth.constants';
 import {
-  AuthUserExistResponce,
-  AuthCreatedResponce,
-  AuthIncorrectLoginResponce,
+  AuthUserExistResponse,
+  AuthCreatedResponse,
+  AuthIncorrectLoginResponse,
 } from './dto/auth.responces';
-// import { UsersService } from '../users/users.service';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -23,8 +22,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({ summary: authApiData.registerUser })
-  @ApiCreatedResponse({ type: AuthCreatedResponce })
-  @ApiBadRequestResponse({ type: AuthUserExistResponce })
+  @ApiCreatedResponse({ type: AuthCreatedResponse })
+  @ApiBadRequestResponse({ type: AuthUserExistResponse })
   @Public()
   @Post('signup')
   async register(@Body() createUserDto: CreateUserDto) {
@@ -32,8 +31,8 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: authApiData.loginUser })
-  @ApiCreatedResponse({ type: AuthCreatedResponce })
-  @ApiBadRequestResponse({ type: AuthIncorrectLoginResponce })
+  @ApiCreatedResponse({ type: AuthCreatedResponse })
+  @ApiBadRequestResponse({ type: AuthIncorrectLoginResponse })
   @Public()
   @Post('signin')
   async login(@Body() loginUserDto: LoginUserDto) {

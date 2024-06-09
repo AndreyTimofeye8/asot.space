@@ -6,6 +6,8 @@ export const authApiData = {
 
 export const authExceptionMessages = {
   incorrectLoginOrPassword: 'Incorrect login or password',
+  unauthorized: 'Unauthorized',
+  forbidden: 'Forbidden resource',
 };
 
 export const saltRounds = 10;

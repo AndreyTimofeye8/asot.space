@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
-import { AuthCreatedResponce } from './dto/auth.responces';
+import { AuthCreatedResponse } from './dto/auth.responces';
 import { LoginUserDto } from './dto/login-user.dto';
 import { authExceptionMessages } from './auth.constants';
 import * as bcrypt from 'bcrypt';
@@ -19,7 +19,7 @@ export class AuthService {
 
   async registerUser(
     createUserDto: CreateUserDto,
-  ): Promise<AuthCreatedResponce> {
+  ): Promise<AuthCreatedResponse> {
     const createdUser = await this.userService.create(createUserDto);
     const { id, login, email, role } = createdUser;
     const payload = { id, login, email, role };
@@ -28,7 +28,7 @@ export class AuthService {
     return { token };
   }
 
-  async loginUser(loginUserDto: LoginUserDto): Promise<AuthCreatedResponce> {
+  async loginUser(loginUserDto: LoginUserDto): Promise<AuthCreatedResponse> {
     const { email, password } = loginUserDto;
     const requiredUser = await this.userService.findOneByEmail(email);
 

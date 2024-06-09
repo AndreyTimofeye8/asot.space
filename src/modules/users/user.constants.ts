@@ -1,7 +1,6 @@
 export const usersApiData = {
   usersTag: 'Users',
-  userIdExample: '123e4567-e89b-12d3-a456-426614174000',
-  userId: 'unique user ID',
+  userId: 'unique user id',
   userLoginExample: 'login123',
   userLogin: 'user login',
   userEmailExample: 'example@email.com',

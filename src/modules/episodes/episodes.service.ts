@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { UpdateEpisodeDto } from './dto/update-episode.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Episode } from '../../entities/episode.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class EpisodesService {
-  create(createEpisodeDto: CreateEpisodeDto) {
-    return 'This action adds a new episode';
+  constructor(
+    @InjectRepository(Episode)
+    private readonly episodeRepository: Repository<Episode>,
+  ) {}
+
+  async create(createEpisodeDto: CreateEpisodeDto[]): Promise<Episode[]> {
+    return this.episodeRepository.save(createEpisodeDto);
   }
 
-  findAll() {
-    return `This action returns all episode`;
+  async findAll(): Promise<Episode[]> {
+    return this.episodeRepository.find();
   }
 
   findOne(id: number) {
