@@ -10,4 +10,9 @@ export const episodeApiData = {
     'https://www.youtube.com/watch?v=n02Y1snxNQQ&ab_channel=ArminvanBuuren',
   episodeYoutubeLink: 'link to youtube episode video',
   createEpisode: 'create new episode',
+  getEpisodeById: 'get episode by id',
+};
+
+export const episodeExceptionMessages = {
+  episodeNotFound: 'Episode not found',
 };

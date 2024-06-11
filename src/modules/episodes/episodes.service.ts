@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { UpdateEpisodeDto } from './dto/update-episode.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Episode } from '../../entities/episode.entity';
 import { Repository } from 'typeorm';
+import { NotFoundError } from 'rxjs';
+import { episodeExceptionMessages } from './episode.constants';
 
 @Injectable()
 export class EpisodesService {
@@ -20,8 +22,15 @@ export class EpisodesService {
     return this.episodeRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} episode`;
+  async findOne(id: string): Promise<Episode> {
+    const episode = await this.episodeRepository.findOne({
+      where: { id },
+      relations: { tracks: true },
+    });
+    if (!episode) {
+      throw new NotFoundException(episodeExceptionMessages.episodeNotFound);
+    }
+    return episode;
   }
 
   update(id: number, updateEpisodeDto: UpdateEpisodeDto) {

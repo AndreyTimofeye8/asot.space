@@ -22,6 +22,6 @@ export class AudioFile {
   episodeId: string;
 
   @ManyToOne(() => Episode, (episode) => episode.audioFiles)
-  @JoinColumn({ name: 'episodeId' })
+  @JoinColumn({ name: 'episode_id' })
   episode: Episode;
 }

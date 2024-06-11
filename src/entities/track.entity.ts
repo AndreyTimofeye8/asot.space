@@ -24,10 +24,10 @@ export class Track {
   @Column({ length: 100, nullable: true })
   label?: string;
 
-  @Column()
+  @Column({ select: false })
   episodeId: string;
 
   @ManyToOne(() => Episode, (episode) => episode.tracks)
-  @JoinColumn({ name: 'episodeId' })
+  @JoinColumn({ name: 'episode_id' })
   episode: Episode;
 }
