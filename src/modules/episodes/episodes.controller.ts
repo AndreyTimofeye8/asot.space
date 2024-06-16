@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Request,
 } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
@@ -36,6 +35,7 @@ import {
   EpisodeNotFoundResponce,
   EpisodeOkResponce,
 } from './dto/episode.responces';
+import { SuccessResponce } from 'src/common/responces';
 
 @ApiTags(episodeApiData.episodesTag)
 @Controller('episodes')
@@ -69,20 +69,31 @@ export class EpisodesController {
   @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
   @ApiParam({ name: 'id', type: 'uuid', example: apiData.idExample })
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.episodeService.findOne(id);
   }
 
+  @ApiOperation({ summary: episodeApiData.updateEpisodeById })
+  @ApiOkResponse({ type: EpisodeOkResponce })
+  @ApiForbiddenResponse({ type: ForbiddenResponse })
+  @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
+  @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
   @Patch(':id')
   @Roles(Role.admin)
   update(@Param('id') id: string, @Body() updateEpisodeDto: UpdateEpisodeDto) {
-    return this.episodeService.update(+id, updateEpisodeDto);
+    return this.episodeService.update(id, updateEpisodeDto);
   }
 
+  @ApiOperation({ summary: episodeApiData.deleteEpisodeById })
+  @ApiForbiddenResponse({ type: ForbiddenResponse })
+  @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
+  @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
+  @ApiOkResponse({ type: SuccessResponce })
   @Delete(':id')
   @Roles(Role.admin)
   remove(@Param('id') id: string) {
-    return this.episodeService.remove(+id);
+    return this.episodeService.remove(id);
   }
 }

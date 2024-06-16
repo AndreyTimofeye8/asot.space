@@ -4,7 +4,6 @@ import { UpdateEpisodeDto } from './dto/update-episode.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Episode } from '../../entities/episode.entity';
 import { Repository } from 'typeorm';
-import { NotFoundError } from 'rxjs';
 import { episodeExceptionMessages } from './episode.constants';
 
 @Injectable()
@@ -27,17 +26,40 @@ export class EpisodesService {
       where: { id },
       relations: { tracks: true },
     });
+
     if (!episode) {
       throw new NotFoundException(episodeExceptionMessages.episodeNotFound);
     }
+
     return episode;
   }
 
-  update(id: number, updateEpisodeDto: UpdateEpisodeDto) {
-    return `This action updates a #${id} episode`;
+  async update(
+    episodeId: string,
+    updateEpisodeDto: UpdateEpisodeDto,
+  ): Promise<Episode> {
+    const { episode, date, youtube } = updateEpisodeDto;
+    const result = await this.episodeRepository.update(
+      { id: episodeId },
+      { episode, date, youtube },
+    );
+
+    if (result.affected === 0) {
+      throw new NotFoundException(episodeExceptionMessages.episodeNotFound);
+    }
+
+    const updatedEpisode = await this.findOne(episodeId);
+
+    return updatedEpisode;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} episode`;
+  async remove(id: string): Promise<{ success: boolean }> {
+    const result = await this.episodeRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(episodeExceptionMessages.episodeNotFound);
+    }
+
+    return { success: true };
   }
 }

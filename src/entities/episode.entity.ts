@@ -7,39 +7,39 @@ import { episodeApiData } from 'src/modules/episodes/episode.constants';
 
 @Entity()
 export class Episode {
-  @PrimaryGeneratedColumn('uuid')
   @ApiProperty({
     type: 'string',
     example: apiData.idExample,
     description: episodeApiData.episodeId,
   })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
   @ApiProperty({
     type: 'string',
     example: episodeApiData.episodeExample,
     description: episodeApiData.episodeNumber,
   })
+  @Column()
   episode: string;
 
-  @Column({
-    type: 'date',
-  })
   @ApiProperty({
     type: 'date',
     example: episodeApiData.episodeDateExample,
     description: episodeApiData.episodeDate,
   })
+  @Column({
+    type: 'date',
+  })
   date: Date;
 
-  @Column({ length: 1000, nullable: true })
   @ApiProperty({
     type: 'string',
     example: episodeApiData.episodeYoutubeLinkExample,
     description: episodeApiData.episodeYoutubeLink,
     required: false,
   })
+  @Column({ length: 1000, nullable: true })
   youtube?: string;
 
   @OneToMany(() => Track, (track) => track.episode)
