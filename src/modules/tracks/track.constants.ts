@@ -13,4 +13,11 @@ export const trackApiData = {
   createTrack: 'create new track(s)',
   getAllTracks: 'get all tracks',
   getAllEpisodeTracks: 'get all episode tracks',
+  getTrackById: 'get track by id',
+  updateTrackById: 'update track by id',
+  deleteTrackById: 'delete track by id',
+};
+
+export const trackExceptionMessages = {
+  trackNotFound: 'Track not found',
 };

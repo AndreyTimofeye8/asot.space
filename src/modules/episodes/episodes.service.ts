@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Episode } from '../../entities/episode.entity';
 import { Repository } from 'typeorm';
 import { episodeExceptionMessages } from './episode.constants';
+import { SuccessResponce } from 'src/common/responces';
 
 @Injectable()
 export class EpisodesService {
@@ -48,12 +49,10 @@ export class EpisodesService {
       throw new NotFoundException(episodeExceptionMessages.episodeNotFound);
     }
 
-    const updatedEpisode = await this.findOne(episodeId);
-
-    return updatedEpisode;
+    return this.findOne(episodeId);
   }
 
-  async remove(id: string): Promise<{ success: boolean }> {
+  async remove(id: string): Promise<SuccessResponce> {
     const result = await this.episodeRepository.delete(id);
 
     if (result.affected === 0) {

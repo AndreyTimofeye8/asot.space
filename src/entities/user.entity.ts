@@ -20,7 +20,7 @@ export class User {
 
   @Column({ type: 'varchar', length: 50 })
   @IsString({ message: usersValidationMessages.incorrectLogin })
-  @Length(3, 50, { message: usersValidationMessages.incorrectEmailLength })
+  @Length(3, 50, { message: usersValidationMessages.incorrectLogin })
   @ApiProperty({
     type: 'string',
     minLength: 3,

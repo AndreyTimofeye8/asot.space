@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Track } from 'src/entities/track.entity';
+import { trackExceptionMessages } from './track.constants';
+import { SuccessResponce } from 'src/common/responces';
 
 @Injectable()
 export class TracksService {
@@ -21,15 +23,48 @@ export class TracksService {
     return this.trackRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} track`;
+  async findOne(id: string): Promise<Track> {
+    const requiredTrack = await this.trackRepository.findOne({ where: { id } });
+
+    if (!requiredTrack) {
+      throw new NotFoundException(trackExceptionMessages.trackNotFound);
+    }
+
+    return requiredTrack;
   }
 
-  update(id: number, updateTrackDto: UpdateTrackDto) {
-    return `This action updates a #${id} track`;
+  async findEpisodeTracks(id: string): Promise<Track[]> {
+    const episodeTracks = await this.trackRepository.find({
+      where: { episodeId: id },
+    });
+
+    return episodeTracks;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} track`;
+  async update(
+    trackId: string,
+    updateTrackDto: UpdateTrackDto,
+  ): Promise<Track> {
+    const { number, artist, title, label, episodeId } = updateTrackDto;
+    const result = await this.trackRepository.update(
+      { id: trackId },
+      { number, artist, title, label, episodeId },
+    );
+
+    if (result.affected === 0) {
+      throw new NotFoundException(trackExceptionMessages.trackNotFound);
+    }
+
+    return this.findOne(trackId);
+  }
+
+  async remove(id: string): Promise<SuccessResponce> {
+    const result = await this.trackRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(trackExceptionMessages.trackNotFound);
+    }
+
+    return { success: true };
   }
 }
