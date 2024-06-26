@@ -4,6 +4,8 @@ export const episodeApiData = {
   episodeId: 'unique episode id',
   episodeExample: '051',
   episodeNumber: 'episode number',
+  episodeNumberForSearch:
+    'episode number, for example "001", "011", "111" or "1111"',
   episodeDateExample: '2002-06-06',
   episodeDate: 'episode date',
   episodeYoutubeLinkExample:
@@ -13,6 +15,7 @@ export const episodeApiData = {
   getEpisodeById: 'get episode by id',
   updateEpisodeById: 'update episode by id',
   deleteEpisodeById: 'delete episode by id',
+  findEpisodeByNumber: 'find episode by number',
 };
 
 export const episodeExceptionMessages = {

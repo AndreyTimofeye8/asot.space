@@ -14,12 +14,13 @@ import { AppDataSource } from 'src/datasource';
 import { UsersService } from 'src/modules/users/users.service';
 import { User } from 'src/entities/user.entity';
 import { globalGuardProviders } from 'src/common/guard/global.guard.providers';
+import { Episode } from 'src/entities/episode.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env' }),
     TypeOrmModule.forRoot(AppDataSource.options),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Episode]),
     TracksModule,
     EpisodesModule,
     UsersModule,
