@@ -23,13 +23,6 @@ services:
     restart: unless-stopped
     volumes:
       - pgdata:/var/lib/postgresql/data
-  
-  frontend:
-    build: 
-      context: ./asot.space.front
-    ports:
-      - "3000:80"
-    restart: unless-stopped
 
 volumes:
   pgdata:
