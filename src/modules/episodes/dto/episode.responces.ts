@@ -51,6 +51,12 @@ export class EpisodeOkResponce {
   youtube: string;
 
   @ApiProperty({
+    type: 'string',
+    example: episodeApiData.episodeImageLinkExample,
+  })
+  imageUrl: string;
+
+  @ApiProperty({
     type: 'array',
     // example: episodeApiData.episodeId,
   })

@@ -42,6 +42,15 @@ export class Episode {
   @Column({ length: 1000, nullable: true })
   youtube?: string;
 
+  @ApiProperty({
+    type: 'string',
+    example: episodeApiData.episodeImageLinkExample,
+    description: episodeApiData.episodeImageLink,
+    required: false,
+  })
+  @Column({ length: 1000, nullable: true })
+  imageUrl?: string;
+
   @OneToMany(() => Track, (track) => track.episode)
   tracks: Track[];
 

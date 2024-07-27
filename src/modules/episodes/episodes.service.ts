@@ -19,10 +19,10 @@ export class EpisodesService {
   }
 
   async findAll(): Promise<Episode[]> {
-    return this.episodeRepository.find();
+    return this.episodeRepository.find({ order: { date: 'ASC' } });
   }
 
-  async findOne(id: string): Promise<Episode> {
+  async findOneById(id: string): Promise<Episode> {
     const episode = await this.episodeRepository.findOne({
       where: { id },
       relations: { tracks: true },
@@ -39,17 +39,17 @@ export class EpisodesService {
     episodeId: string,
     updateEpisodeDto: UpdateEpisodeDto,
   ): Promise<Episode> {
-    const { episode, date, youtube } = updateEpisodeDto;
+    const { episode, date, youtube, imageUrl } = updateEpisodeDto;
     const result = await this.episodeRepository.update(
       { id: episodeId },
-      { episode, date, youtube },
+      { episode, date, youtube, imageUrl },
     );
 
     if (result.affected === 0) {
       throw new NotFoundException(episodeExceptionMessages.episodeNotFound);
     }
 
-    return this.findOne(episodeId);
+    return this.findOneById(episodeId);
   }
 
   async remove(id: string): Promise<SuccessResponce> {

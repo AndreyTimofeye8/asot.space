@@ -72,7 +72,7 @@ export class EpisodesController {
   @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.episodeService.findOne(id);
+    return this.episodeService.findOneById(id);
   }
 
   @ApiOperation({ summary: episodeApiData.updateEpisodeById })

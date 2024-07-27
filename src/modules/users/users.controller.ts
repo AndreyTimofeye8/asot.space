@@ -8,33 +8,53 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { CurrentUser } from 'src/common/decorator/current-user.decorator';
+import { JwtPayloadDto } from '../auth/dto/jwt-payload.dto';
+import { apiData } from 'src/common/constants';
+import { UnauthorizedResponse } from '../auth/dto/auth.responces';
+import { UserNotFoundResponce } from './dto/user.responces';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  // @Post()
-  // async create(@Body() createUserDto: CreateUserDto) {
-  //   return this.userService.create(createUserDto);
-  // }
-
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @ApiUnauthorizedResponse({
+    type: UnauthorizedResponse,
+    description: apiData.unauthorizedOperation,
+  })
+  @ApiOkResponse({
+    type: JwtPayloadDto,
+    description: apiData.successfulOperation,
+  })
+  @ApiNotFoundResponse({ type: UserNotFoundResponce })
+  @Get('/account')
+  findOne(@CurrentUser() user: JwtPayloadDto) {
+    return this.userService.findUserAccount(user.email);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @ApiOkResponse({
+    type: JwtPayloadDto,
+    description: apiData.successfulOperation,
+  })
+  @ApiUnauthorizedResponse({
+    type: UnauthorizedResponse,
+    description: apiData.unauthorizedOperation,
+  })
+  @ApiNotFoundResponse({ type: UserNotFoundResponce })
+  @Patch('/account')
+  update(
+    @CurrentUser() user: JwtPayloadDto,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.updateUserAccount(user.email, updateUserDto);
   }
 
   @Delete(':id')

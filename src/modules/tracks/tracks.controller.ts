@@ -30,6 +30,7 @@ import {
   UnauthorizedResponse,
 } from '../auth/dto/auth.responces';
 import { SuccessResponce } from 'src/common/responces';
+import { apiData } from 'src/common/constants';
 
 @ApiTags(trackApiData.tracksTag)
 @Controller('tracks')
@@ -38,9 +39,15 @@ export class TracksController {
 
   @ApiOperation({ summary: trackApiData.createTrack })
   @ApiBody({ type: [CreateTrackDto] })
-  @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
+  @ApiUnauthorizedResponse({
+    type: UnauthorizedResponse,
+    description: apiData.unauthorizedOperation,
+  })
   @ApiForbiddenResponse({ type: ForbiddenResponse })
-  @ApiCreatedResponse({ type: [Track] })
+  @ApiCreatedResponse({
+    type: [Track],
+    description: apiData.successfulOperation,
+  })
   @Post()
   @Roles(Role.admin)
   create(@Body() createTrackDto: CreateTrackDto[]) {
@@ -49,7 +56,10 @@ export class TracksController {
 
   @ApiOperation({ summary: trackApiData.getAllTracks })
   @ApiOkResponse({ type: [TrackResponce] })
-  @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
+  @ApiUnauthorizedResponse({
+    type: UnauthorizedResponse,
+    description: apiData.unauthorizedOperation,
+  })
   @Get()
   findAll() {
     return this.tracksService.findAll();
@@ -58,7 +68,10 @@ export class TracksController {
   @ApiOperation({ summary: trackApiData.getTrackById })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
   @ApiNotFoundResponse({ type: TrackNotFoundResponce })
-  @ApiOkResponse({ type: TrackResponce })
+  @ApiOkResponse({
+    type: TrackResponce,
+    description: apiData.successfulOperation,
+  })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tracksService.findOne(id);
@@ -66,7 +79,10 @@ export class TracksController {
 
   @ApiOperation({ summary: trackApiData.getAllEpisodeTracks })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
-  @ApiOkResponse({ type: [TrackResponce] })
+  @ApiOkResponse({
+    type: [TrackResponce],
+    description: apiData.successfulOperation,
+  })
   @Get('/episode/:episodeId')
   findAllEpisodeTracks(@Param('id') id: string) {
     return this.tracksService.findEpisodeTracks(id);
@@ -76,7 +92,10 @@ export class TracksController {
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
   @ApiNotFoundResponse({ type: TrackNotFoundResponce })
   @ApiForbiddenResponse({ type: ForbiddenResponse })
-  @ApiOkResponse({ type: TrackResponce })
+  @ApiOkResponse({
+    type: TrackResponce,
+    description: apiData.successfulOperation,
+  })
   @Patch(':id')
   @Roles(Role.admin)
   update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
@@ -87,7 +106,10 @@ export class TracksController {
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
   @ApiNotFoundResponse({ type: TrackNotFoundResponce })
   @ApiForbiddenResponse({ type: ForbiddenResponse })
-  @ApiOkResponse({ type: SuccessResponce })
+  @ApiOkResponse({
+    type: SuccessResponce,
+    description: apiData.successfulOperation,
+  })
   @Delete(':id')
   @Roles(Role.admin)
   remove(@Param('id') id: string) {
