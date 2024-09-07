@@ -4,6 +4,7 @@ import { HttpStatusText } from 'src/common/http.status';
 import { episodeApiData, episodeExceptionMessages } from '../episode.constants';
 import { Track } from 'src/entities/track.entity';
 import { apiData } from 'src/common/constants';
+import { TrackResponce } from 'src/modules/tracks/track.responces';
 
 export class EpisodeNotFoundResponce {
   @ApiProperty({
@@ -57,8 +58,8 @@ export class EpisodeOkResponce {
   imageUrl: string;
 
   @ApiProperty({
-    type: 'array',
-    // example: episodeApiData.episodeId,
+    type: TrackResponce,
+    isArray: true,
   })
-  tracks: Track[];
+  tracks: TrackResponce[];
 }

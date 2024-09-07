@@ -1,31 +1,26 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { CurrentUser } from 'src/common/decorator/current-user.decorator';
+import { CurrentUser } from '../../common/decorator/current-user.decorator';
 import { JwtPayloadDto } from '../auth/dto/jwt-payload.dto';
-import { apiData } from 'src/common/constants';
+import { apiData } from '../../common/constants';
 import { UnauthorizedResponse } from '../auth/dto/auth.responces';
 import { UserNotFoundResponce } from './dto/user.responces';
+import { usersApiData } from './user.constants';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
+  @ApiOperation({ summary: usersApiData.getUserAccount })
   @ApiUnauthorizedResponse({
     type: UnauthorizedResponse,
     description: apiData.unauthorizedOperation,

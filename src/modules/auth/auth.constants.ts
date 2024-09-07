@@ -1,7 +1,7 @@
 export const authApiData = {
-  registerUser: 'register new user',
-  loginUser: 'login user',
-  bearerToken: 'bearer token',
+  registerAccount: 'Register new user account',
+  loginUser: 'Login user',
+  bearerToken: 'Bearer token',
 };
 
 export const authExceptionMessages = {

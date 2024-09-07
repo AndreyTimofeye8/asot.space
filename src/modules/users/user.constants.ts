@@ -8,6 +8,8 @@ export const usersApiData = {
   userPasswordExample: '%paSs123',
   userPassword: 'user password',
   userRole: 'user role: admin or user',
+  getUserAccount: 'Find user account',
+  updateUserInfo: 'Update user information',
 };
 
 export const usersValidationMessages = {

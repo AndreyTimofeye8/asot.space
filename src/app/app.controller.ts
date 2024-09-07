@@ -30,7 +30,7 @@ export class AppController {
   @ApiOkResponse({ type: Episode })
   @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
   @Public()
-  @Get('/search')
+  @Get('/searching')
   searchEpisodeByNumber(@Query('episode') episode: string) {
     return this.appService.findEpisodeByNumber(episode);
   }

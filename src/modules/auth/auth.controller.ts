@@ -21,7 +21,7 @@ import {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiOperation({ summary: authApiData.registerUser })
+  @ApiOperation({ summary: authApiData.registerAccount })
   @ApiCreatedResponse({ type: AuthCreatedResponse })
   @ApiBadRequestResponse({ type: AuthUserExistResponse })
   @Public()

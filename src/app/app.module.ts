@@ -15,16 +15,23 @@ import { UsersService } from 'src/modules/users/users.service';
 import { User } from 'src/entities/user.entity';
 import { globalGuardProviders } from 'src/common/guard/global.guard.providers';
 import { Episode } from 'src/entities/episode.entity';
+import { SearchModule } from 'src/modules/search/search.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env' }),
+    // ConfigModule.forRoot({
+    //   envFilePath:
+    //     process.env.NODE_ENV === 'production' ? '.env' : '.local.env',
+    //   isGlobal: true,
+    // }),
     TypeOrmModule.forRoot(AppDataSource.options),
     TypeOrmModule.forFeature([User, Episode]),
     TracksModule,
     EpisodesModule,
     UsersModule,
     AuthModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [

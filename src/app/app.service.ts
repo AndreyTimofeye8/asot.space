@@ -18,6 +18,7 @@ export class AppService {
   async findEpisodeByNumber(episodeNumber: string): Promise<Episode> {
     const foundedEpisode = await this.episodeRepository.findOne({
       where: { episode: episodeNumber },
+      relations: { tracks: true },
     });
 
     if (!foundedEpisode) {
