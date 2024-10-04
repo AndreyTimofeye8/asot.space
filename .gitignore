@@ -37,11 +37,10 @@ lerna-debug.log*
 
 # dotenv environment variable files
 .env
+.postgres.env
 .env.development.local
 .env.test.local
 .env.production.local
-.local.env
-.local.postgres.env
 
 # temp directory
 .temp

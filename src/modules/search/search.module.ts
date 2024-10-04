@@ -9,7 +9,12 @@ import { SearchController } from './search.controller';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Track, Episode]),
-    ElasticsearchModule.register({ node: process.env.ELASTICSEARCH_NODE }),
+    ElasticsearchModule.register({
+      node:
+        process.env.LOCAL === 'true'
+          ? process.env.ELASTICSEARCH_NODE_LOCAL
+          : process.env.ELASTICSEARCH_NODE,
+    }),
   ],
   providers: [SearchService],
   controllers: [SearchController],

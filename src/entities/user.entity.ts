@@ -5,8 +5,18 @@ import {
   usersApiData,
   usersValidationMessages,
 } from '../modules/users/user.constants';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { apiData } from 'src/common/constants';
+import { Rating } from './rating.entity';
+import { Comment } from './comment.entity';
+import { Episode } from './episode.entity';
 
 @Entity({ name: 'user' })
 export class User {
@@ -66,4 +76,18 @@ export class User {
   @Column({ type: 'enum', enum: Role, default: Role.user })
   @ApiProperty({ type: 'enum', enum: Role, description: usersApiData.userRole })
   role: Role;
+
+  @OneToMany(() => Rating, (rating) => rating.episode)
+  ratings: Rating[];
+
+  @OneToMany(() => Comment, (comment) => comment.episode)
+  comments: Comment[];
+
+  @ManyToMany(() => Episode, (episode) => episode.users)
+  @JoinTable({
+    name: 'user_episode',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'episode_id', referencedColumnName: 'id' },
+  })
+  episodes: Episode[];
 }

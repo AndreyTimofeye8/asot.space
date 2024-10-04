@@ -1,9 +1,18 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Track } from './track.entity';
 import { AudioFile } from './audio-file.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { apiData } from 'src/common/constants';
 import { episodeApiData } from 'src/modules/episodes/episode.constants';
+import { Rating } from './rating.entity';
+import { Comment } from './comment.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Episode {
@@ -56,4 +65,13 @@ export class Episode {
 
   @OneToMany(() => AudioFile, (audioFile) => audioFile.episode)
   audioFiles: AudioFile[];
+
+  @OneToMany(() => Rating, (rating) => rating.episode)
+  ratings: Rating[];
+
+  @OneToMany(() => Comment, (comment) => comment.episode)
+  comments: Comment[];
+
+  @ManyToMany(() => User, (user) => user.episodes)
+  users: User[];
 }
