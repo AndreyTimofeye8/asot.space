@@ -10,11 +10,11 @@ COPY package*.json ./
 # устанавливаем зависимости
 RUN npm install
 
-# пересобираем bcrypt, чтобы избежать проблем с ELF header
-RUN npm rebuild bcrypt --build-from-source
-
 # копируем остальную часть
 COPY . .
+
+# пересобираем bcrypt, чтобы избежать проблем с ELF header
+RUN npm rebuild bcrypt --build-from-source
 
 # сборка проекта
 RUN npm run build

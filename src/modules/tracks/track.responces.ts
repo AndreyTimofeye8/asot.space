@@ -4,7 +4,7 @@ import { HttpStatusText } from 'src/common/http.status';
 import { Track } from 'src/entities/track.entity';
 import { trackExceptionMessages } from './track.constants';
 
-export class TrackResponce extends OmitType(Track, ['episodeId']) {}
+export class TrackResponce extends OmitType(Track, []) {}
 
 export class TrackNotFoundResponce {
   @ApiProperty({

@@ -2,7 +2,6 @@ import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { HttpStatusText } from 'src/common/http.status';
 import { episodeApiData, episodeExceptionMessages } from '../episode.constants';
-import { Track } from 'src/entities/track.entity';
 import { apiData } from 'src/common/constants';
 import { TrackResponce } from 'src/modules/tracks/track.responces';
 

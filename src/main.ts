@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { join } from 'path';
+import { writeFileSync } from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +16,10 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+  writeFileSync(
+    join(process.cwd(), 'docs.json'),
+    JSON.stringify(document, null, 2),
+  );
   SwaggerModule.setup('api', app, document);
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));

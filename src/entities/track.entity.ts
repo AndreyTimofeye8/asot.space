@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -54,15 +56,11 @@ export class Track {
   @Column({ length: 100, nullable: true })
   label?: string;
 
-  @ApiProperty({
-    type: 'string',
-    example: apiData.idExample,
-    description: episodeApiData.episodeId,
+  @ManyToMany(() => Episode, (episode) => episode.tracks)
+  @JoinTable({
+    name: 'track_episodes',
+    joinColumn: { name: 'track_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'episode_id', referencedColumnName: 'id' },
   })
-  @Column({ select: false })
-  episodeId: string;
-
-  @ManyToOne(() => Episode, (episode) => episode.tracks)
-  @JoinColumn({ name: 'episode_id' })
-  episode: Episode;
+  episodes: Episode[];
 }

@@ -35,7 +35,12 @@ export class TracksService {
 
   async findEpisodeTracks(id: string): Promise<Track[]> {
     const episodeTracks = await this.trackRepository.find({
-      where: { episodeId: id },
+      relations: ['episodes'],
+      where: {
+        episodes: {
+          id: id,
+        },
+      },
     });
 
     return episodeTracks;
@@ -45,10 +50,10 @@ export class TracksService {
     trackId: string,
     updateTrackDto: UpdateTrackDto,
   ): Promise<Track> {
-    const { number, artist, title, label, episodeId } = updateTrackDto;
+    const { number, artist, title, label } = updateTrackDto;
     const result = await this.trackRepository.update(
       { id: trackId },
-      { number, artist, title, label, episodeId },
+      { number, artist, title, label },
     );
 
     if (result.affected === 0) {

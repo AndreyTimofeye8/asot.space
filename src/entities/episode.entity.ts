@@ -60,7 +60,7 @@ export class Episode {
   @Column({ length: 1000, nullable: true })
   imageUrl?: string;
 
-  @OneToMany(() => Track, (track) => track.episode)
+  @ManyToMany(() => Track, (track) => track.episodes)
   tracks: Track[];
 
   @OneToMany(() => AudioFile, (audioFile) => audioFile.episode)
