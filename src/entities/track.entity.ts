@@ -11,7 +11,8 @@ import { Episode } from './episode.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { apiData } from 'src/common/constants';
 import { trackApiData } from 'src/modules/tracks/track.constants';
-import { episodeApiData } from 'src/modules/episodes/episode.constants';
+import { Artist } from './artist.entity';
+import { Label } from './label.entity';
 
 @Entity()
 export class Track {
@@ -48,13 +49,16 @@ export class Track {
   title: string;
 
   @ApiProperty({
-    type: 'string',
-    required: false,
-    example: trackApiData.trackLabelExample,
-    description: trackApiData.trackLabel,
+    type: 'uuid',
+    example: apiData.idExample,
+    description: trackApiData.trackLabelId,
   })
-  @Column({ length: 100, nullable: true })
-  label?: string;
+  @Column({ type: 'uuid', nullable: false })
+  labelId: string;
+
+  @ManyToOne(() => Label, (label) => label.tracks)
+  @JoinColumn({ name: 'label_id' })
+  label: Label;
 
   @ManyToMany(() => Episode, (episode) => episode.tracks)
   @JoinTable({
@@ -63,4 +67,12 @@ export class Track {
     inverseJoinColumn: { name: 'episode_id', referencedColumnName: 'id' },
   })
   episodes: Episode[];
+
+  @ManyToMany(() => Artist, (artist) => artist.tracks)
+  @JoinTable({
+    name: 'track_artists',
+    joinColumn: { name: 'track_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'artist_id', referencedColumnName: 'id' },
+  })
+  artists: Artist[];
 }
