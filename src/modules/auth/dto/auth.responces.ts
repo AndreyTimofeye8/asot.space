@@ -6,7 +6,7 @@ import { HttpStatusText } from '../../../common/http.status';
 
 export class AuthCreatedResponse {
   @ApiProperty({ type: 'string', description: authApiData.bearerToken })
-  token: string;
+  accessToken: string;
 }
 
 export class UnauthorizedResponse {

@@ -9,12 +9,17 @@ export const trackApiData = {
   trackTitle: 'track title',
   trackTitleExample: 'Communication',
   trackLabelId: 'track label id',
-  createTrack: 'create new track(s)',
+  createTrack: 'create new track(s) (admin)',
+  createTrackArtistRelation: 'add artist(s) to track (admin)',
+  createTrackAward: 'add award to track (admin)',
   getAllTracks: 'get all tracks',
   getAllEpisodeTracks: 'get all episode tracks',
   getTrackById: 'get track by id',
-  updateTrackById: 'update track by id',
-  deleteTrackById: 'delete track by id',
+  updateTrackById: 'update track by id (admin)',
+  deleteTrackById: 'delete track by id (admin)',
+  findTrackByTitle: 'find track by title',
+  queryStringForSearch: 'query string for search',
+  queryStringExample: 'Communication',
 };
 
 export const trackExceptionMessages = {

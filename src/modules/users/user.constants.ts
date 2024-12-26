@@ -25,4 +25,5 @@ export const userExceptionMessages = {
   userAlreadyExist: 'Account with this email address already exist',
   userCreateFailed: 'Failed to create user',
   userNotFound: 'Account not found',
+  loginAlreadyExist: 'Login is already taken',
 };

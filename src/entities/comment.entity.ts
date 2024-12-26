@@ -16,9 +16,9 @@ import { usersApiData } from '../modules/users/user.constants';
 
 @Entity()
 export class Comment {
-  @ApiProperty({ type: 'number', example: '1' })
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+  @ApiProperty({ type: 'string' })
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ApiProperty({ type: 'string', minimum: 3, maximum: 500 })
   @Min(3)

@@ -5,7 +5,7 @@ export class AddRatingFavoriteComment1725720909996
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`CREATE TABLE "rating"(
-        id SERIAL PRIMARY KEY,
+        id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
         value SMALLINT NOT NULL CHECK (value >= 1 AND value <= 5),
         episode_id UUID,
         user_id UUID,
@@ -14,7 +14,7 @@ export class AddRatingFavoriteComment1725720909996
         )`);
 
     await queryRunner.query(`CREATE TABLE "comment" (
-        id SERIAL PRIMARY KEY,
+        id UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
         content VARCHAR (500) NOT NULL,
         episode_id UUID,
         user_id UUID,

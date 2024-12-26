@@ -49,14 +49,14 @@ export class SearchService implements OnModuleInit {
       body: {
         mappings: {
           properties: {
-            artist: {
-              type: 'text', // Используем text для анализа текста
-              fields: {
-                keyword: {
-                  type: 'keyword', // Используем keyword для точного совпадения
-                },
-              },
-            },
+            // artist: {
+            //   type: 'text', // Используем text для анализа текста
+            //   fields: {
+            //     keyword: {
+            //       type: 'keyword', // Используем keyword для точного совпадения
+            //     },
+            //   },
+            // },
             title: {
               type: 'text', // Используем text для анализа текста
               fields: {
@@ -65,14 +65,14 @@ export class SearchService implements OnModuleInit {
                 },
               },
             },
-            label: {
-              type: 'text', // Используем text для анализа текста
-              fields: {
-                keyword: {
-                  type: 'keyword', // Используем keyword для точного совпадения
-                },
-              },
-            },
+            // label: {
+            //   type: 'text', // Используем text для анализа текста
+            //   fields: {
+            //     keyword: {
+            //       type: 'keyword', // Используем keyword для точного совпадения
+            //     },
+            //   },
+            // },
           },
         },
       },
@@ -133,13 +133,13 @@ export class SearchService implements OnModuleInit {
                     {
                       bool: {
                         should: [
-                          {
-                            bool: {
-                              should: queryWords.map((word) => ({
-                                match: { artist: word },
-                              })),
-                            },
-                          },
+                          // {
+                          //   bool: {
+                          //     should: queryWords.map((word) => ({
+                          //       match: { artist: word },
+                          //     })),
+                          //   },
+                          // },
                           {
                             bool: {
                               should: queryWords.map((word) => ({

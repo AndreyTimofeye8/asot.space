@@ -1,9 +1,10 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { HttpStatusText } from 'src/common/http.status';
+import { HttpStatusText } from '../../../common/http.status';
 import { episodeApiData, episodeExceptionMessages } from '../episode.constants';
-import { apiData } from 'src/common/constants';
-import { TrackResponce } from 'src/modules/tracks/track.responces';
+import { apiData } from '../../../common/constants';
+import { TrackResponce } from '../../../modules/tracks/track.responces';
+import { Episode } from '../../../entities/episode.entity';
 
 export class EpisodeNotFoundResponce {
   @ApiProperty({
@@ -61,4 +62,11 @@ export class EpisodeOkResponce {
     isArray: true,
   })
   tracks: TrackResponce[];
+}
+
+export class EpisodesResponse {
+  episodes: Episode[];
+  totalPages: number;
+  currentPage: number;
+  totalItems: number;
 }

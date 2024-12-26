@@ -6,9 +6,9 @@ import { User } from './user.entity';
 
 @Entity()
 export class Rating {
-  @ApiProperty({ type: 'number', example: '1' })
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+  @ApiProperty({ type: 'string' })
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ApiProperty({ type: 'number', minimum: 1, maximum: 5 })
   @Min(1)

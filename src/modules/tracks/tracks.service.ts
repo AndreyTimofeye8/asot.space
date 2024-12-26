@@ -2,16 +2,27 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, In, Like, Repository } from 'typeorm';
 import { Track } from 'src/entities/track.entity';
 import { trackExceptionMessages } from './track.constants';
 import { SuccessResponce } from 'src/common/responces';
+import { CreateTrackArtistDto } from './dto/create-track-artist.dto';
+import { Artist } from '../../entities/artist.entity';
+import { CreateAwardDto } from './dto/create-award.dto';
+import { TrackEpisode } from 'src/entities/track-episode.entity';
+import { query } from 'express';
+import { ResourcePaginationDto } from 'src/common/dto/resource-pagination.dto';
+import { TracksResponse } from './dto/track-responses.dto';
 
 @Injectable()
 export class TracksService {
   constructor(
     @InjectRepository(Track)
     private readonly trackRepository: Repository<Track>,
+    @InjectRepository(Artist)
+    private readonly artistRepository: Repository<Artist>,
+    @InjectRepository(TrackEpisode)
+    private readonly trackEpisodeRepository: Repository<TrackEpisode>,
   ) {}
 
   async create(createTrackDto: CreateTrackDto[]): Promise<Track[]> {
@@ -19,8 +30,21 @@ export class TracksService {
     return savedTracks;
   }
 
-  async findAll(): Promise<Track[]> {
-    return this.trackRepository.find();
+  async findAll(query: ResourcePaginationDto): Promise<TracksResponse> {
+    const [tracks, totalItems] = await this.trackRepository.findAndCount({
+      order: { title: 'ASC' },
+      skip: (query.page - 1) * query.limit,
+      take: query.limit,
+    });
+
+    const totalPages = Math.ceil(totalItems / query.limit);
+
+    return {
+      tracks,
+      totalPages,
+      currentPage: query.page,
+      totalItems,
+    };
   }
 
   async findOne(id: string): Promise<Track> {
@@ -31,6 +55,39 @@ export class TracksService {
     }
 
     return requiredTrack;
+  }
+
+  async createTrackArtistRelation(dto: CreateTrackArtistDto) {
+    const { trackId, artistIds } = dto;
+    const track = await this.findOne(trackId);
+    const artists = await this.artistRepository.findBy({
+      id: In(artistIds),
+    });
+
+    track.artists = Array.isArray(track.artists)
+      ? [...track.artists, ...artists]
+      : [...artists];
+
+    const updatedTrack = await this.trackRepository.save(track);
+
+    return updatedTrack;
+  }
+
+  async createTrackAward(dto: CreateAwardDto) {
+    const { trackId, awardId, episodeId } = dto;
+    const trackEpisode = await this.trackEpisodeRepository.findOne({
+      where: { track_id: trackId, episode_id: episodeId },
+    });
+
+    if (!trackEpisode) {
+      throw new NotFoundException('Track-Episode relation not found');
+    }
+
+    trackEpisode.awardId = awardId;
+
+    await this.trackEpisodeRepository.save(trackEpisode);
+
+    return { message: 'Award added to track-episode relation successfully' };
   }
 
   async findEpisodeTracks(id: string): Promise<Track[]> {
@@ -50,10 +107,10 @@ export class TracksService {
     trackId: string,
     updateTrackDto: UpdateTrackDto,
   ): Promise<Track> {
-    const { number, artist, title, label } = updateTrackDto;
+    const { number, title, label } = updateTrackDto;
     const result = await this.trackRepository.update(
       { id: trackId },
-      { number, artist, title, label },
+      { number, title, label },
     );
 
     if (result.affected === 0) {
@@ -71,5 +128,11 @@ export class TracksService {
     }
 
     return { success: true };
+  }
+
+  async findTrackByTitle(query: string): Promise<Track[]> {
+    return await this.trackRepository.find({
+      where: { title: ILike(`%${query}%`) },
+    });
   }
 }

@@ -20,9 +20,12 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { password, email } = createUserDto;
+    const { password, email, login } = createUserDto;
 
     await this.isUserExist(email);
+
+    await this.isLoginExist(login);
+
     createUserDto.password = await this.hashPassword(password);
 
     const createdUser = await this.userRepository.save(createUserDto);
@@ -46,6 +49,16 @@ export class UsersService {
 
     if (foundedUser) {
       throw new BadRequestException(userExceptionMessages.userAlreadyExist);
+    }
+  }
+
+  async isLoginExist(login: string): Promise<void> {
+    const foundedLogin = await this.userRepository.findOne({
+      where: { login },
+    });
+
+    if (foundedLogin) {
+      throw new BadRequestException(userExceptionMessages.loginAlreadyExist);
     }
   }
 

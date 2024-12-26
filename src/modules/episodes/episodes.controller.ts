@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
@@ -28,14 +30,16 @@ import {
   ForbiddenResponse,
   UnauthorizedResponse,
 } from '../auth/dto/auth.responces';
-import { Roles } from 'src/common/decorator/roles.decorator';
-import { Role } from 'src/common/enum/role.enum';
-import { apiData } from 'src/common/constants';
+import { Roles } from '../../common/decorator/roles.decorator';
+import { Role } from '../../common/enum/role.enum';
 import {
   EpisodeNotFoundResponce,
   EpisodeOkResponce,
+  EpisodesResponse,
 } from './dto/episode.responces';
-import { SuccessResponce } from 'src/common/responces';
+import { SuccessResponce } from '../../common/responces';
+import { CreateEpisodeTrackDto } from './dto/create-episode-track.dto';
+import { ResourcePaginationDto } from '../../common/dto/resource-pagination.dto';
 
 @ApiTags(episodeApiData.episodesTag)
 @Controller('episodes')
@@ -47,6 +51,7 @@ export class EpisodesController {
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
   @ApiForbiddenResponse({ type: ForbiddenResponse })
   @ApiBody({ type: [CreateEpisodeDto] })
+  //@ApiTags('Admin')
   @Post()
   @Roles(Role.admin)
   create(
@@ -56,23 +61,43 @@ export class EpisodesController {
     return this.episodeService.create(createEpisodeDto);
   }
 
-  @ApiOperation({ summary: episodeApiData.getAllEpisodes })
-  @ApiOkResponse({ type: [Episode] })
-  @Public()
-  @Get()
-  findAll() {
-    return this.episodeService.findAll();
+  @ApiOperation({ summary: episodeApiData.createEpisodeTrackRelation })
+  @ApiCreatedResponse({})
+  @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
+  @ApiForbiddenResponse({ type: ForbiddenResponse })
+  @ApiBody({ type: CreateEpisodeTrackDto })
+  //@ApiTags('Admin')
+  @Post('episode-track')
+  @Roles(Role.admin)
+  createEpisodeTrack(
+    @Body()
+    dto: CreateEpisodeTrackDto,
+  ) {
+    return this.episodeService.createEpisodeTrackRelation(dto);
   }
 
-  @ApiOperation({ summary: episodeApiData.getEpisodeById })
+  @ApiOperation({ summary: episodeApiData.getAllEpisodes })
+  @ApiOkResponse({ type: [EpisodesResponse] })
+  @ApiTags(episodeApiData.episodesTag)
+  @Public()
+  @Get()
+  findAll(@Query() query: ResourcePaginationDto) {
+    return this.episodeService.findAll(query);
+  }
+
+  @ApiOperation({ summary: episodeApiData.getEpisodeByNumber })
   @ApiOkResponse({ type: EpisodeOkResponce })
   @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
-  @ApiParam({ name: 'id', type: 'uuid', example: apiData.idExample })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    example: episodeApiData.episodeNumber,
+  })
   @Public()
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.episodeService.findOneById(id);
+  @Get('episode-:number')
+  findOne(@Param('number') numberId: string) {
+    return this.episodeService.findOneById(numberId);
   }
 
   @ApiOperation({ summary: episodeApiData.updateEpisodeById })
@@ -80,6 +105,7 @@ export class EpisodesController {
   @ApiForbiddenResponse({ type: ForbiddenResponse })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
   @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
+  //@ApiTags('Admin')
   @Patch(':id')
   @Roles(Role.admin)
   update(@Param('id') id: string, @Body() updateEpisodeDto: UpdateEpisodeDto) {
@@ -91,6 +117,7 @@ export class EpisodesController {
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
   @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
   @ApiOkResponse({ type: SuccessResponce })
+  //@ApiTags('Admin')
   @Delete(':id')
   @Roles(Role.admin)
   remove(@Param('id') id: string) {

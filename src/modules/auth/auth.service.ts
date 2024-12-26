@@ -25,7 +25,7 @@ export class AuthService {
     const payload = { id, login, email, role };
     const token = this.generateToken(payload);
 
-    return { token };
+    return { accessToken: token };
   }
 
   async loginUser(loginUserDto: LoginUserDto): Promise<AuthCreatedResponse> {
@@ -52,7 +52,7 @@ export class AuthService {
     const { id, login, role } = requiredUser;
     const token = this.generateToken({ id, login, email, role });
 
-    return { token };
+    return { accessToken: token };
   }
 
   generateToken(payload: JwtPayloadDto): string {

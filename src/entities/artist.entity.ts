@@ -3,7 +3,7 @@ import { Track } from './track.entity';
 
 @Entity()
 export class Artist {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('increment')
   id: string;
 
   @Column({ length: 100 })

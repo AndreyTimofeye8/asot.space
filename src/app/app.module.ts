@@ -10,21 +10,23 @@ import { AuthService } from 'src/modules/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppDataSource } from 'src/datasource';
-import { UsersService } from 'src/modules/users/users.service';
-import { User } from 'src/entities/user.entity';
+import { AppDataSource } from '../datasource';
+import { UsersService } from '../modules/users/users.service';
+import { User } from '../entities/user.entity';
 import { globalGuardProviders } from 'src/common/guard/global.guard.providers';
-import { Episode } from 'src/entities/episode.entity';
-import { SearchModule } from 'src/modules/search/search.module';
+import { Episode } from '../entities/episode.entity';
+import { SearchModule } from '../modules/search/search.module';
+import { BotModule } from '../modules/bot/bot.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(process.cwd(), 'public', 'static'),
+      serveRoot: '/static',
+    }),
     ConfigModule.forRoot({ envFilePath: '.env' }),
-    // ConfigModule.forRoot({
-    //   envFilePath:
-    //     process.env.NODE_ENV === 'production' ? '.env' : '.local.env',
-    //   isGlobal: true,
-    // }),
     TypeOrmModule.forRoot(AppDataSource.options),
     TypeOrmModule.forFeature([User, Episode]),
     TracksModule,
@@ -32,6 +34,7 @@ import { SearchModule } from 'src/modules/search/search.module';
     UsersModule,
     AuthModule,
     SearchModule,
+    BotModule,
   ],
   controllers: [AppController],
   providers: [

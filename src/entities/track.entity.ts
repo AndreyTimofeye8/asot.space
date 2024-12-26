@@ -34,14 +34,6 @@ export class Track {
 
   @ApiProperty({
     type: 'string',
-    example: trackApiData.trackArtistExample,
-    description: trackApiData.trackArtist,
-  })
-  @Column({ length: 100 })
-  artist: string;
-
-  @ApiProperty({
-    type: 'string',
     example: trackApiData.trackTitleExample,
     description: trackApiData.trackTitle,
   })
@@ -62,7 +54,7 @@ export class Track {
 
   @ManyToMany(() => Episode, (episode) => episode.tracks)
   @JoinTable({
-    name: 'track_episodes',
+    name: 'track_episode',
     joinColumn: { name: 'track_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'episode_id', referencedColumnName: 'id' },
   })
@@ -70,7 +62,7 @@ export class Track {
 
   @ManyToMany(() => Artist, (artist) => artist.tracks)
   @JoinTable({
-    name: 'track_artists',
+    name: 'track_artist',
     joinColumn: { name: 'track_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'artist_id', referencedColumnName: 'id' },
   })
