@@ -17,6 +17,7 @@ import {
 } from './dto/auth.responces';
 
 @ApiTags('Authentication')
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -24,7 +25,6 @@ export class AuthController {
   @ApiOperation({ summary: authApiData.registerAccount })
   @ApiCreatedResponse({ type: AuthCreatedResponse })
   @ApiBadRequestResponse({ type: AuthUserExistResponse })
-  @Public()
   @Post('signup')
   async register(@Body() createUserDto: CreateUserDto) {
     return this.authService.registerUser(createUserDto);
@@ -33,7 +33,6 @@ export class AuthController {
   @ApiOperation({ summary: authApiData.loginUser })
   @ApiCreatedResponse({ type: AuthCreatedResponse })
   @ApiBadRequestResponse({ type: AuthIncorrectLoginResponse })
-  @Public()
   @Post('signin')
   async login(@Body() loginUserDto: LoginUserDto) {
     return this.authService.loginUser(loginUserDto);

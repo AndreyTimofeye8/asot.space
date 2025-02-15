@@ -48,7 +48,6 @@ export class BotSearchService {
 
         if (episode) {
           const formattedEpisode = this.getFormattedEpisodeData(episode);
-          console.log(episode);
 
           await context.telegram.sendPhoto(
             context.chat.id,
@@ -71,6 +70,7 @@ export class BotSearchService {
           );
         }
       }
+
       await context.scene.leave();
     }
   }
@@ -87,7 +87,7 @@ export class BotSearchService {
         return artist.name;
       });
 
-      return `${track.number}.${track['award'] ? ` ${track['award'].name}:` : ''} ${artists.join(', ')} - ${track.title}${track.label ? ` [${track.label.name}]` : ''}`;
+      return `${track['number']}.${track['award'] ? ` ${track['award'].name}:` : ''} ${artists.join(', ')} - ${track.title}${track.label ? ` [${track.label.name}]` : ''}`;
     });
 
     const stringifyEpisode = `<b>ASOT ${episode.episode}</b>\n\n${formattedDate}\n\n<b>Tracklist</b>:\n${tracklist.join('\n')}\n\n<a href="${episode.youtube}">YouTube</a>`;

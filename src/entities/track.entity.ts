@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Episode } from './episode.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { apiData } from 'src/common/constants';
+import { apiData } from '../common/constants';
 import { trackApiData } from 'src/modules/tracks/track.constants';
 import { Artist } from './artist.entity';
 import { Label } from './label.entity';
@@ -18,19 +18,11 @@ import { Label } from './label.entity';
 export class Track {
   @ApiProperty({
     type: 'string',
-    example: apiData.idExample,
+    example: apiData.uuidIdExample,
     description: trackApiData.trackId,
   })
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @ApiProperty({
-    type: 'number',
-    example: trackApiData.trackNumberExample,
-    description: trackApiData.trackNumber,
-  })
-  @Column('smallint')
-  number: number;
 
   @ApiProperty({
     type: 'string',
@@ -42,7 +34,7 @@ export class Track {
 
   @ApiProperty({
     type: 'uuid',
-    example: apiData.idExample,
+    example: apiData.intIdExample,
     description: trackApiData.trackLabelId,
   })
   @Column({ type: 'uuid', nullable: false })

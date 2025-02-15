@@ -18,7 +18,7 @@ import { User } from './user.entity';
 export class Episode {
   @ApiProperty({
     type: 'string',
-    example: apiData.idExample,
+    example: apiData.uuidIdExample,
     description: episodeApiData.episodeId,
   })
   @PrimaryGeneratedColumn('uuid')

@@ -1,6 +1,5 @@
 export const trackApiData = {
   tracksTag: 'Tracks',
-  getAllTrack: 'get all tracks',
   trackId: 'unique track id',
   trackNumberExample: 10,
   trackNumber: 'track number',
@@ -12,9 +11,8 @@ export const trackApiData = {
   createTrack: 'create new track(s) (admin)',
   createTrackArtistRelation: 'add artist(s) to track (admin)',
   createTrackAward: 'add award to track (admin)',
-  getAllTracks: 'get all tracks',
+  getAllTracks: 'get all tracks (admin)',
   getAllEpisodeTracks: 'get all episode tracks',
-  getTrackById: 'get track by id',
   updateTrackById: 'update track by id (admin)',
   deleteTrackById: 'delete track by id (admin)',
   findTrackByTitle: 'find track by title',

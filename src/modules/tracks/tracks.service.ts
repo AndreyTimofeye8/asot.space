@@ -2,16 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, In, Like, Repository } from 'typeorm';
-import { Track } from 'src/entities/track.entity';
+import { In, Repository } from 'typeorm';
+import { Track } from '../../entities/track.entity';
 import { trackExceptionMessages } from './track.constants';
-import { SuccessResponce } from 'src/common/responces';
+import { SuccessResponce } from '../../common/responces';
 import { CreateTrackArtistDto } from './dto/create-track-artist.dto';
 import { Artist } from '../../entities/artist.entity';
 import { CreateAwardDto } from './dto/create-award.dto';
-import { TrackEpisode } from 'src/entities/track-episode.entity';
-import { query } from 'express';
-import { ResourcePaginationDto } from 'src/common/dto/resource-pagination.dto';
+import { TrackEpisode } from '../../entities/track-episode.entity';
+import { ResourcePaginationDto } from '../../common/dto/resource-pagination.dto';
 import { TracksResponse } from './dto/track-responses.dto';
 
 @Injectable()
@@ -73,8 +72,8 @@ export class TracksService {
     return updatedTrack;
   }
 
-  async createTrackAward(dto: CreateAwardDto) {
-    const { trackId, awardId, episodeId } = dto;
+  async createTrackNumberAndAward(dto: CreateAwardDto) {
+    const { trackId, awardId, episodeId, trackNumber } = dto;
     const trackEpisode = await this.trackEpisodeRepository.findOne({
       where: { track_id: trackId, episode_id: episodeId },
     });
@@ -84,10 +83,11 @@ export class TracksService {
     }
 
     trackEpisode.awardId = awardId;
+    trackEpisode.number = trackNumber;
 
     await this.trackEpisodeRepository.save(trackEpisode);
 
-    return { message: 'Award added to track-episode relation successfully' };
+    return { message: 'Award  added to track-episode relation successfully' };
   }
 
   async findEpisodeTracks(id: string): Promise<Track[]> {
@@ -107,10 +107,10 @@ export class TracksService {
     trackId: string,
     updateTrackDto: UpdateTrackDto,
   ): Promise<Track> {
-    const { number, title, label } = updateTrackDto;
+    const { title, label } = updateTrackDto;
     const result = await this.trackRepository.update(
       { id: trackId },
-      { number, title, label },
+      { title, label },
     );
 
     if (result.affected === 0) {
@@ -128,11 +128,5 @@ export class TracksService {
     }
 
     return { success: true };
-  }
-
-  async findTrackByTitle(query: string): Promise<Track[]> {
-    return await this.trackRepository.find({
-      where: { title: ILike(`%${query}%`) },
-    });
   }
 }

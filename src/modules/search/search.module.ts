@@ -5,10 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Track } from '../../entities/track.entity';
 import { Episode } from '../../entities/episode.entity';
 import { SearchController } from './search.controller';
+import { Label } from '../../entities/label.entity';
+import { Artist } from '../../entities/artist.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Track, Episode]),
+    TypeOrmModule.forFeature([Track, Episode, Label, Artist]),
     ElasticsearchModule.register({
       node:
         process.env.LOCAL === 'true'
@@ -18,6 +20,5 @@ import { SearchController } from './search.controller';
   ],
   providers: [SearchService],
   controllers: [SearchController],
-  // exports: [SearchService],
 })
 export class SearchModule {}

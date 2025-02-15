@@ -23,7 +23,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   @ApiProperty({
     type: 'string',
-    example: apiData.idExample,
+    example: apiData.uuidIdExample,
     description: usersApiData.userId,
   })
   id: string;

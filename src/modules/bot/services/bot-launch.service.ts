@@ -14,8 +14,6 @@ export class BotLaunchService {
 
     if (message) {
       if ('text' in message && message.text.slice(7)) {
-        console.log('с параметром');
-        console.log(message.text.slice(7));
       } else {
         await context.reply(messages.welcome, {
           reply_markup: {

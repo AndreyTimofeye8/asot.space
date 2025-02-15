@@ -32,7 +32,7 @@ export class Comment {
 
   @ApiProperty({
     type: 'string',
-    example: apiData.idExample,
+    example: apiData.uuidIdExample,
     description: episodeApiData.episodeId,
   })
   @Column()
@@ -40,7 +40,7 @@ export class Comment {
 
   @ApiProperty({
     type: 'string',
-    example: apiData.idExample,
+    example: apiData.uuidIdExample,
     description: usersApiData.userId,
   })
   @Column()

@@ -6,7 +6,7 @@ import { trackApiData } from '../track.constants';
 export class CreateTrackArtistDto {
   @ApiProperty({
     type: 'string',
-    example: apiData.idExample,
+    example: apiData.uuidIdExample,
     description: trackApiData.trackId,
   })
   trackId: string;

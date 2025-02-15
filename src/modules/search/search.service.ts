@@ -1,9 +1,11 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Episode } from 'src/entities/episode.entity';
-import { Track } from 'src/entities/track.entity';
+import { Episode } from '../../entities/episode.entity';
+import { Track } from '../../entities/track.entity';
 import { Repository } from 'typeorm';
+import { Label } from '../../entities/label.entity';
+import { Artist } from '../../entities/artist.entity';
 
 @Injectable()
 export class SearchService implements OnModuleInit {
@@ -13,6 +15,10 @@ export class SearchService implements OnModuleInit {
     private readonly episodeRepository: Repository<Episode>,
     @InjectRepository(Track)
     private readonly trackRepository: Repository<Track>,
+    @InjectRepository(Label)
+    private readonly labelRepository: Repository<Label>,
+    @InjectRepository(Artist)
+    private readonly artistRepository: Repository<Artist>,
   ) {}
 
   async onModuleInit() {
@@ -28,6 +34,16 @@ export class SearchService implements OnModuleInit {
 
     await this.elasticsearchService.indices.delete(
       { index: 'tracks' },
+      { ignore: [404] },
+    );
+
+    await this.elasticsearchService.indices.delete(
+      { index: 'labels' },
+      { ignore: [404] },
+    );
+
+    await this.elasticsearchService.indices.delete(
+      { index: 'artists' },
       { ignore: [404] },
     );
 
@@ -49,14 +65,6 @@ export class SearchService implements OnModuleInit {
       body: {
         mappings: {
           properties: {
-            // artist: {
-            //   type: 'text', // Используем text для анализа текста
-            //   fields: {
-            //     keyword: {
-            //       type: 'keyword', // Используем keyword для точного совпадения
-            //     },
-            //   },
-            // },
             title: {
               type: 'text', // Используем text для анализа текста
               fields: {
@@ -65,14 +73,42 @@ export class SearchService implements OnModuleInit {
                 },
               },
             },
-            // label: {
-            //   type: 'text', // Используем text для анализа текста
-            //   fields: {
-            //     keyword: {
-            //       type: 'keyword', // Используем keyword для точного совпадения
-            //     },
-            //   },
-            // },
+          },
+        },
+      },
+    });
+
+    await this.elasticsearchService.indices.create({
+      index: 'labels',
+      body: {
+        mappings: {
+          properties: {
+            name: {
+              type: 'text', // Используем text для анализа текста
+              fields: {
+                keyword: {
+                  type: 'keyword', // Используем keyword для точного совпадения
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    await this.elasticsearchService.indices.create({
+      index: 'artists',
+      body: {
+        mappings: {
+          properties: {
+            name: {
+              type: 'text', // Используем text для анализа текста
+              fields: {
+                keyword: {
+                  type: 'keyword', // Используем keyword для точного совпадения
+                },
+              },
+            },
           },
         },
       },
@@ -101,6 +137,28 @@ export class SearchService implements OnModuleInit {
         document: track,
       });
     }
+
+    const labels = await this.labelRepository.find();
+    console.log('Indexing labels:', labels.length);
+
+    for (const label of labels) {
+      await this.elasticsearchService.index({
+        index: 'labels',
+        id: label.id.toString(),
+        document: label,
+      });
+    }
+
+    const artists = await this.artistRepository.find();
+    console.log('Indexing artists:', artists.length);
+
+    for (const artist of artists) {
+      await this.elasticsearchService.index({
+        index: 'artists',
+        id: artist.id.toString(),
+        document: artist,
+      });
+    }
   }
 
   async searchAll(queryString: string) {
@@ -110,10 +168,8 @@ export class SearchService implements OnModuleInit {
       .map((word) => word.trim().toLowerCase()) // Убираем пробелы и переводим в нижний регистр
       .filter((word) => word.length > 0); // Убираем пустые слова
 
-    console.log(queryWords);
-
     const { hits } = await this.elasticsearchService.search({
-      index: ['episodes', 'tracks'],
+      index: ['episodes', 'tracks', 'labels', 'artists'],
       body: {
         query: {
           bool: {
@@ -133,13 +189,6 @@ export class SearchService implements OnModuleInit {
                     {
                       bool: {
                         should: [
-                          // {
-                          //   bool: {
-                          //     should: queryWords.map((word) => ({
-                          //       match: { artist: word },
-                          //     })),
-                          //   },
-                          // },
                           {
                             bool: {
                               should: queryWords.map((word) => ({
@@ -147,14 +196,37 @@ export class SearchService implements OnModuleInit {
                               })),
                             },
                           },
-                          {
-                            bool: {
-                              should: queryWords.map((word) => ({
-                                match: { label: word },
-                              })),
-                            },
-                          },
                         ],
+                        minimum_should_match: 1,
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                bool: {
+                  filter: [
+                    { term: { _index: 'labels' } },
+                    {
+                      bool: {
+                        should: queryWords.map((word) => ({
+                          match: { name: word }, // Поиск по полю `name` в `labels`
+                        })),
+                        minimum_should_match: 1,
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                bool: {
+                  filter: [
+                    { term: { _index: 'artists' } },
+                    {
+                      bool: {
+                        should: queryWords.map((word) => ({
+                          match: { name: word }, // Поиск по полю `name` в `artists`
+                        })),
                         minimum_should_match: 1,
                       },
                     },
@@ -169,8 +241,6 @@ export class SearchService implements OnModuleInit {
       },
     });
 
-    console.log('Search Results:', hits);
-
     const episodes = hits.hits
       .filter((hit) => hit._index === 'episodes')
       .map((hit) => hit._source);
@@ -179,9 +249,19 @@ export class SearchService implements OnModuleInit {
       .filter((hit) => hit._index === 'tracks')
       .map((hit) => hit._source);
 
+    const labels = hits.hits
+      .filter((hit) => hit._index === 'labels')
+      .map((hit) => hit._source);
+
+    const artists = hits.hits
+      .filter((hit) => hit._index === 'artists')
+      .map((hit) => hit._source);
+
     return {
       episodes,
       tracks,
+      labels,
+      artists,
     };
   }
 }

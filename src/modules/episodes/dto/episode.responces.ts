@@ -29,7 +29,7 @@ export class EpisodeNotFoundResponce {
 export class EpisodeOkResponce {
   @ApiProperty({
     type: 'string',
-    example: apiData.idExample,
+    example: apiData.uuidIdExample,
   })
   id: string;
 

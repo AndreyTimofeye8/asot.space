@@ -2,6 +2,8 @@ import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Track } from './track.entity';
 import { Episode } from './episode.entity';
 import { Award } from './award.entity';
+import { ApiProperty } from '@nestjs/swagger';
+import { trackApiData } from '../modules/tracks/track.constants';
 
 @Entity('')
 export class TrackEpisode {
@@ -25,4 +27,12 @@ export class TrackEpisode {
 
   @Column({ type: 'int', nullable: true })
   awardId: number;
+
+  @ApiProperty({
+    type: 'number',
+    example: trackApiData.trackNumberExample,
+    description: trackApiData.trackNumber,
+  })
+  @Column('smallint')
+  number: number;
 }

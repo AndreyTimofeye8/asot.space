@@ -18,7 +18,6 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -92,8 +91,8 @@ export class TracksController {
   //@ApiTags('Admin')
   @Post('award')
   @Roles(Role.admin)
-  createTrackAward(@Body() dto: CreateAwardDto) {
-    return this.tracksService.createTrackAward(dto);
+  addTrackAwardAndNumber(@Body() dto: CreateAwardDto) {
+    return this.tracksService.createTrackNumberAndAward(dto);
   }
 
   @ApiOperation({ summary: trackApiData.getAllTracks })
@@ -107,44 +106,6 @@ export class TracksController {
   findAll(@Query() query: ResourcePaginationDto) {
     return this.tracksService.findAll(query);
   }
-
-  @ApiOperation({ summary: trackApiData.findTrackByTitle })
-  @ApiQuery({
-    name: 'title',
-    type: 'string',
-    description: trackApiData.queryStringForSearch,
-    example: trackApiData.queryStringExample,
-  })
-  @ApiOkResponse({ type: [Track] })
-  // @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
-  @Roles(Role.admin)
-  @Get('/search')
-  searchTrackByTitle(@Query('q') q: string) {
-    return this.tracksService.findTrackByTitle(q);
-  }
-
-  @ApiOperation({ summary: trackApiData.getTrackById })
-  @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
-  @ApiNotFoundResponse({ type: TrackNotFoundResponce })
-  @ApiOkResponse({
-    type: TrackResponce,
-    description: apiData.successfulOperation,
-  })
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tracksService.findOne(id);
-  }
-
-  // @ApiOperation({ summary: trackApiData.getAllEpisodeTracks })
-  // @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
-  // @ApiOkResponse({
-  //   type: [TrackResponce],
-  //   description: apiData.successfulOperation,
-  // })
-  // @Get('/episode/:episodeId')
-  // findAllEpisodeTracks(@Param('id') id: string) {
-  //   return this.tracksService.findEpisodeTracks(id);
-  // }
 
   @ApiOperation({ summary: trackApiData.updateTrackById })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })

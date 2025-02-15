@@ -86,7 +86,6 @@ export class EpisodesService {
         imageUrl: true,
         tracks: {
           id: true,
-          number: true,
           title: true,
           artists: {
             id: true,
@@ -104,7 +103,7 @@ export class EpisodesService {
       throw new NotFoundException(episodeExceptionMessages.episodeNotFound);
     }
 
-    const trackAwards = await this.trackEpisodeRepository
+    const episodeTracks = await this.trackEpisodeRepository
       .createQueryBuilder('te')
       .leftJoinAndSelect('te.track', 'track')
       .leftJoinAndSelect('te.award', 'award')
@@ -112,16 +111,16 @@ export class EpisodesService {
       .getMany();
 
     episode.tracks = episode.tracks.map((track) => {
-      const trackAward = trackAwards.find((te) => te.track.id === track.id);
+      const trackEpisode = episodeTracks.find((te) => te.track.id === track.id);
 
-      if (trackAward) {
-        track['award'] = trackAward?.award
+      if (trackEpisode) {
+        track['number'] = trackEpisode.number;
+        track['award'] = trackEpisode?.award
           ? {
-              name: trackAward.award.name,
-              description: trackAward.award.description,
+              name: trackEpisode.award.name,
+              description: trackEpisode.award.description,
             }
           : null;
-        // track['award'] = trackAward.award;
       }
 
       return track;
