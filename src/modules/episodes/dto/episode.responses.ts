@@ -1,12 +1,15 @@
 import { HttpStatus } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { HttpStatusText } from '../../../common/http.status';
 import { episodeApiData, episodeExceptionMessages } from '../episode.constants';
 import { apiData } from '../../../common/constants';
-import { TrackResponce } from '../../../modules/tracks/track.responces';
-import { Episode } from '../../../entities/episode.entity';
+import { TrackResponse } from '../../tracks/track.responses';
+import { AudioFile } from '../../../entities/audio-file.entity';
+import { User } from '../../../entities/user.entity';
+import { Comment } from '../../../entities/comment.entity';
+import { Rating } from '../../../entities/rating.entity';
 
-export class EpisodeNotFoundResponce {
+export class EpisodeNotFoundResponse {
   @ApiProperty({
     type: 'string',
     example: episodeExceptionMessages.episodeNotFound,
@@ -26,7 +29,7 @@ export class EpisodeNotFoundResponce {
   statusCode: number;
 }
 
-export class EpisodeOkResponce {
+export class EpisodeOkResponse {
   @ApiProperty({
     type: 'string',
     example: apiData.uuidIdExample,
@@ -43,30 +46,49 @@ export class EpisodeOkResponce {
     type: 'string',
     example: episodeApiData.episodeDateExample,
   })
-  date: string;
+  date: Date;
 
   @ApiProperty({
     type: 'string',
     example: episodeApiData.episodeYoutubeLinkExample,
   })
-  youtube: string;
+  youtube?: string;
 
   @ApiProperty({
     type: 'string',
     example: episodeApiData.episodeImageLinkExample,
   })
-  imageUrl: string;
+  imageUrl?: string;
 
   @ApiProperty({
-    type: TrackResponce,
+    type: TrackResponse,
     isArray: true,
   })
-  tracks: TrackResponce[];
+  tracks: TrackResponse[];
+
+  audioFiles: AudioFile[];
+
+  ratings: Rating[];
+
+  comments: Comment[];
+
+  users: User[];
 }
 
+export class ShortEpisodeResponse extends OmitType(EpisodeOkResponse, [
+  'tracks',
+] as const) {}
+
 export class EpisodesResponse {
-  episodes: Episode[];
+  @ApiProperty({ type: [ShortEpisodeResponse] })
+  episodes: ShortEpisodeResponse[];
+
+  @ApiProperty({ type: 'number' })
   totalPages: number;
+
+  @ApiProperty({ type: 'number' })
   currentPage: number;
+
+  @ApiProperty({ type: 'number' })
   totalItems: number;
 }

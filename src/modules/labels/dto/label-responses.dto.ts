@@ -1,5 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
-import { EpisodesResponse } from '../../episodes/dto/episode.responces';
+import { EpisodesResponse } from '../../episodes/dto/episode.responses';
 import { Label } from 'src/entities/label.entity';
 
 export class LabelsResponse extends OmitType(EpisodesResponse, [

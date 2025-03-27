@@ -11,6 +11,7 @@ async function bootstrap() {
     .setDescription('APPLICATION API')
     .setVersion('1.0')
     .addTag('ASOT')
+    // .addBearerAuth({ type: 'http' })
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -82,12 +82,20 @@ export class UsersService {
 
   async updateUserAccount(email: string, dto: UpdateUserDto) {
     const account = await this.findUserAccount(email);
+
+    if (account.login === dto.login) return account;
+
+    await this.isLoginExist(dto.login);
+
     account.login = dto.login;
+
     await this.userRepository.save(account);
-    return this.findUserAccount(email);
+
+    // return this.findUserAccount(email);
+    return account;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} user`;
+  // }
 }

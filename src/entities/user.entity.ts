@@ -13,7 +13,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { apiData } from 'src/common/constants';
+import { apiData } from '../common/constants';
 import { Rating } from './rating.entity';
 import { Comment } from './comment.entity';
 import { Episode } from './episode.entity';

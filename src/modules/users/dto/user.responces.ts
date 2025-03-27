@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { userExceptionMessages } from '../user.constants';
-import { HttpStatusText } from 'src/common/http.status';
+import { HttpStatusText } from '../../../common/http.status';
 import { HttpStatus } from '@nestjs/common';
 
 export class UserNotFoundResponce {

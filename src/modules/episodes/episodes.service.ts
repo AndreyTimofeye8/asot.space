@@ -7,14 +7,15 @@ import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { UpdateEpisodeDto } from './dto/update-episode.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Episode } from '../../entities/episode.entity';
-import { In, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { episodeExceptionMessages } from './episode.constants';
 import { SuccessResponce } from '../../common/responces';
 import { CreateEpisodeTrackDto } from './dto/create-episode-track.dto';
 import { Track } from '../../entities/track.entity';
-import { TrackEpisode } from 'src/entities/track-episode.entity';
+import { TrackEpisode } from '../../entities/track-episode.entity';
 import { ResourcePaginationDto } from '../../common/dto/resource-pagination.dto';
-import { EpisodesResponse } from './dto/episode.responces';
+import { EpisodesResponse } from './dto/episode.responses';
+import { CacheService } from '../cache/cache.service';
 
 @Injectable()
 export class EpisodesService {
@@ -25,6 +26,7 @@ export class EpisodesService {
     private readonly episodeRepository: Repository<Episode>,
     @InjectRepository(TrackEpisode)
     private readonly trackEpisodeRepository: Repository<TrackEpisode>,
+    private readonly cacheService: CacheService,
   ) {}
 
   async create(createEpisodeDto: CreateEpisodeDto[]): Promise<Episode[]> {
@@ -57,8 +59,27 @@ export class EpisodesService {
     });
   }
 
-  async findAll(query: ResourcePaginationDto): Promise<EpisodesResponse> {
+  async findAll(
+    query: ResourcePaginationDto,
+    year?: number,
+  ): Promise<EpisodesResponse> {
+    const cacheKey = `episodes:${query.page}:${query.limit}:${year || ''}`;
+    const cachedData = await this.cacheService.get<EpisodesResponse>(cacheKey);
+
+    if (cachedData) {
+      return cachedData;
+    }
+
+    const where: any = {};
+
+    if (year) {
+      const startDate = `${year}-01-01`;
+      const endDate = `${year + 1}-01-01`;
+      where.date = Between(startDate, endDate);
+    }
+
     const [episodes, totalItems] = await this.episodeRepository.findAndCount({
+      where,
       order: { date: 'DESC' },
       skip: (query.page - 1) * query.limit,
       take: query.limit,
@@ -66,12 +87,16 @@ export class EpisodesService {
 
     const totalPages = Math.ceil(totalItems / query.limit);
 
-    return {
+    const response: EpisodesResponse = {
       episodes,
       totalPages,
       currentPage: query.page,
       totalItems,
     };
+
+    await this.cacheService.set(cacheKey, response, 3600000);
+
+    return response;
   }
 
   async findOneById(numberId: string): Promise<Episode> {
@@ -143,7 +168,9 @@ export class EpisodesService {
       throw new NotFoundException(episodeExceptionMessages.episodeNotFound);
     }
 
-    return this.findOneById(episodeId);
+    await this.cacheService.delKeysWithPrefix('episodes');
+
+    return this.episodeRepository.findOne({ where: { id: episodeId } });
   }
 
   async remove(id: string): Promise<SuccessResponce> {
@@ -152,6 +179,8 @@ export class EpisodesService {
     if (result.affected === 0) {
       throw new NotFoundException(episodeExceptionMessages.episodeNotFound);
     }
+
+    await this.cacheService.delKeysWithPrefix('episodes');
 
     return { success: true };
   }

@@ -7,7 +7,7 @@ import { Artist } from '../../entities/artist.entity';
 import { Repository } from 'typeorm';
 import { ResourcePaginationDto } from '../../common/dto/resource-pagination.dto';
 import { artistExceptionMessages } from './artists.constants';
-import { SuccessResponce } from 'src/common/responces';
+import { SuccessResponce } from '../../common/responces';
 
 @Injectable()
 export class ArtistsService {

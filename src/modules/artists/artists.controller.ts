@@ -13,6 +13,7 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { artistApiData } from './artists.constants';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -23,7 +24,7 @@ import { ArtistsResponse } from './dto/artist-responses.dto';
 import { Artist } from '../../entities/artist.entity';
 import { Roles } from '../../common/decorator/roles.decorator';
 import { Role } from '../../common/enum/role.enum';
-import { SuccessResponce } from 'src/common/responces';
+import { SuccessResponce } from '../../common/responces';
 
 @ApiTags(artistApiData.artistsTag)
 @Controller('artists')

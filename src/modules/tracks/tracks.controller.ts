@@ -22,10 +22,10 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { trackApiData } from './track.constants';
-import { Roles } from 'src/common/decorator/roles.decorator';
+import { Roles } from '../../common/decorator/roles.decorator';
 import { Role } from '../../common/enum/role.enum';
 import { Track } from '../../entities/track.entity';
-import { TrackNotFoundResponce, TrackResponce } from './track.responces';
+import { TrackNotFoundResponse, TrackResponse } from './track.responses';
 import {
   ForbiddenResponse,
   UnauthorizedResponse,
@@ -34,7 +34,7 @@ import { SuccessResponce } from '../../common/responces';
 import { apiData } from '../../common/constants';
 import { CreateTrackArtistDto } from './dto/create-track-artist.dto';
 import { CreateAwardDto } from './dto/create-award.dto';
-import { ResourcePaginationDto } from 'src/common/dto/resource-pagination.dto';
+import { ResourcePaginationDto } from '../../common/dto/resource-pagination.dto';
 
 @ApiTags(trackApiData.tracksTag)
 @Controller('tracks')
@@ -96,7 +96,7 @@ export class TracksController {
   }
 
   @ApiOperation({ summary: trackApiData.getAllTracks })
-  @ApiOkResponse({ type: [TrackResponce] })
+  @ApiOkResponse({ type: [TrackResponse] })
   @ApiUnauthorizedResponse({
     type: UnauthorizedResponse,
     description: apiData.unauthorizedOperation,
@@ -109,10 +109,10 @@ export class TracksController {
 
   @ApiOperation({ summary: trackApiData.updateTrackById })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
-  @ApiNotFoundResponse({ type: TrackNotFoundResponce })
+  @ApiNotFoundResponse({ type: TrackNotFoundResponse })
   @ApiForbiddenResponse({ type: ForbiddenResponse })
   @ApiOkResponse({
-    type: TrackResponce,
+    type: TrackResponse,
     description: apiData.successfulOperation,
   })
   //@ApiTags('Admin')
@@ -124,7 +124,7 @@ export class TracksController {
 
   @ApiOperation({ summary: trackApiData.deleteTrackById })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
-  @ApiNotFoundResponse({ type: TrackNotFoundResponce })
+  @ApiNotFoundResponse({ type: TrackNotFoundResponse })
   @ApiForbiddenResponse({ type: ForbiddenResponse })
   @ApiOkResponse({
     type: SuccessResponce,

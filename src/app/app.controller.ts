@@ -1,15 +1,15 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Public } from 'src/common/decorator/public.decorator';
-import { episodeApiData } from 'src/modules/episodes/episode.constants';
+import { Public } from '../common/decorator/public.decorator';
+import { episodeApiData } from '../modules/episodes/episode.constants';
 import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
 } from '@nestjs/swagger';
-import { Episode } from 'src/entities/episode.entity';
-import { EpisodeNotFoundResponce } from 'src/modules/episodes/dto/episode.responces';
+import { Episode } from '../entities/episode.entity';
+import { EpisodeNotFoundResponse } from '../modules/episodes/dto/episode.responses';
 
 @Controller()
 export class AppController {
@@ -28,7 +28,7 @@ export class AppController {
     example: episodeApiData.episodeExample,
   })
   @ApiOkResponse({ type: Episode })
-  @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
+  @ApiNotFoundResponse({ type: EpisodeNotFoundResponse })
   @Public()
   @Get('/searching')
   searchEpisodeByNumber(@Query('episode') episode: string) {

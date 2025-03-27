@@ -33,10 +33,10 @@ import {
 import { Roles } from '../../common/decorator/roles.decorator';
 import { Role } from '../../common/enum/role.enum';
 import {
-  EpisodeNotFoundResponce,
-  EpisodeOkResponce,
+  EpisodeNotFoundResponse,
+  EpisodeOkResponse,
   EpisodesResponse,
-} from './dto/episode.responces';
+} from './dto/episode.responses';
 import { SuccessResponce } from '../../common/responces';
 import { CreateEpisodeTrackDto } from './dto/create-episode-track.dto';
 import { ResourcePaginationDto } from '../../common/dto/resource-pagination.dto';
@@ -77,23 +77,23 @@ export class EpisodesController {
   }
 
   @ApiOperation({ summary: episodeApiData.getAllEpisodes })
-  @ApiOkResponse({ type: [EpisodesResponse] })
+  @ApiOkResponse({ type: EpisodesResponse })
   @ApiTags(episodeApiData.episodesTag)
   @Public()
   @Get()
-  findAll(@Query() query: ResourcePaginationDto) {
-    return this.episodeService.findAll(query);
+  findAll(@Query() query: ResourcePaginationDto, @Query('year') year?: number) {
+    return this.episodeService.findAll(query, year);
   }
 
   @ApiOperation({ summary: episodeApiData.getEpisodeByNumber })
-  @ApiOkResponse({ type: EpisodeOkResponce })
-  @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
+  @ApiOkResponse({ type: EpisodeOkResponse })
+  @ApiNotFoundResponse({ type: EpisodeNotFoundResponse })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    example: episodeApiData.episodeNumber,
-  })
+  // @ApiParam({
+  //   name: 'number',
+  //   type: 'string',
+  //   example: episodeApiData.episodeNumber,
+  // })
   @Public()
   @Get('episode-:number')
   findOne(@Param('number') numberId: string) {
@@ -101,10 +101,10 @@ export class EpisodesController {
   }
 
   @ApiOperation({ summary: episodeApiData.updateEpisodeById })
-  @ApiOkResponse({ type: EpisodeOkResponce })
+  @ApiOkResponse({ type: EpisodeOkResponse })
   @ApiForbiddenResponse({ type: ForbiddenResponse })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
-  @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
+  @ApiNotFoundResponse({ type: EpisodeNotFoundResponse })
   //@ApiTags('Admin')
   @Patch(':id')
   @Roles(Role.admin)
@@ -115,7 +115,7 @@ export class EpisodesController {
   @ApiOperation({ summary: episodeApiData.deleteEpisodeById })
   @ApiForbiddenResponse({ type: ForbiddenResponse })
   @ApiUnauthorizedResponse({ type: UnauthorizedResponse })
-  @ApiNotFoundResponse({ type: EpisodeNotFoundResponce })
+  @ApiNotFoundResponse({ type: EpisodeNotFoundResponse })
   @ApiOkResponse({ type: SuccessResponce })
   //@ApiTags('Admin')
   @Delete(':id')

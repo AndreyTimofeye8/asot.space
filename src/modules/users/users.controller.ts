@@ -52,8 +52,9 @@ export class UsersController {
     return this.userService.updateUserAccount(user.email, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
+  // TODO remove accounts by admin
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.userService.remove(+id);
+  // }
 }

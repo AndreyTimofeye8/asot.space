@@ -1,4 +1,9 @@
-import { OmitType } from '@nestjs/swagger';
-import { Episode } from 'src/entities/episode.entity';
+import { PickType } from '@nestjs/swagger';
+import { Episode } from '../../../entities/episode.entity';
 
-export class CreateEpisodeDto extends OmitType(Episode, ['id'] as const) {}
+export class CreateEpisodeDto extends PickType(Episode, [
+  'episode',
+  'date',
+  'imageUrl',
+  'youtube',
+] as const) {}

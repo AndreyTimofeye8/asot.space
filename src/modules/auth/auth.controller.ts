@@ -18,12 +18,12 @@ import {
 
 @ApiTags('Authentication')
 @Public()
+@ApiCreatedResponse({ type: AuthCreatedResponse })
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({ summary: authApiData.registerAccount })
-  @ApiCreatedResponse({ type: AuthCreatedResponse })
   @ApiBadRequestResponse({ type: AuthUserExistResponse })
   @Post('signup')
   async register(@Body() createUserDto: CreateUserDto) {
@@ -31,7 +31,6 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: authApiData.loginUser })
-  @ApiCreatedResponse({ type: AuthCreatedResponse })
   @ApiBadRequestResponse({ type: AuthIncorrectLoginResponse })
   @Post('signin')
   async login(@Body() loginUserDto: LoginUserDto) {

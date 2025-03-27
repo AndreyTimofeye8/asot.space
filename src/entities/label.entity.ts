@@ -1,8 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Track } from './track.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { apiData } from 'src/common/constants';
-import { labelApiData } from 'src/modules/labels/label.constants';
+import { apiData } from '../common/constants';
+import { labelApiData } from '../modules/labels/label.constants';
 
 @Entity()
 export class Label {

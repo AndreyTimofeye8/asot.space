@@ -10,7 +10,7 @@ import {
 import { Episode } from './episode.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { apiData } from '../common/constants';
-import { trackApiData } from 'src/modules/tracks/track.constants';
+import { trackApiData } from '../modules/tracks/track.constants';
 import { Artist } from './artist.entity';
 import { Label } from './label.entity';
 

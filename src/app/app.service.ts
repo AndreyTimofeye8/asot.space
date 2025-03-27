@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Episode } from 'src/entities/episode.entity';
-import { episodeExceptionMessages } from 'src/modules/episodes/episode.constants';
+import { Episode } from '../entities/episode.entity';
+import { episodeExceptionMessages } from '../modules/episodes/episode.constants';
 import { Repository } from 'typeorm';
 
 @Injectable()
